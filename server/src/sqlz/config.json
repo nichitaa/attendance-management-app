@@ -1,0 +1,13 @@
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "attendance_management",
+    "host": "localhost",
+    "dialect": "mysql",
+    "logging": true,
+    "force": true,
+    "timezone": "+00:00"
+  },
+  "production": {}
+}

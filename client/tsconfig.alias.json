@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@feature/*": [
+        "./src/feature/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@pages/*": [
+        "./src/pages/*"
+      ]
+    }
+  }
+}

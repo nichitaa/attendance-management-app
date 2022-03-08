@@ -1,0 +1,45 @@
+{
+  "name": "time-traking-system",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "npm run gulp-less && npm run dev-vite",
+    "dev-vite": "vite",
+    "build": "tsc && npm run gulp-less && vite build",
+    "preview": "vite preview",
+    "gulp-less": "gulp less",
+    "format": "npx prettier --write ."
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@reduxjs/toolkit": "^1.8.0",
+    "antd": "^4.18.9",
+    "auth-react-router": "^0.2.2",
+    "dotenv": "^16.0.0",
+    "nanoid": "^3.3.1",
+    "react": "^17.0.2",
+    "react-css-theme-switcher": "^0.3.0",
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@types/react-redux": "^7.1.23",
+    "@vitejs/plugin-react": "^1.0.7",
+    "autoprefixer": "^10.4.2",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-debug": "^4.0.0",
+    "gulp-less": "^5.0.0",
+    "gulp-postcss": "^9.0.1",
+    "less": "^4.1.2",
+    "less-plugin-npm-import": "^2.1.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.4",
+    "vite": "^2.8.0",
+    "vite-aliases": "^0.9.1"
+  }
+}
