@@ -14,6 +14,7 @@ interface UserAttributes {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   role: UserRoles;
   dateOfBirth: Date;
   PIN: string;
@@ -58,6 +59,10 @@ export const UserModel =
       validate: {
         isEmail: true,
       },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     role: {
       type: DataTypes.ENUM,
