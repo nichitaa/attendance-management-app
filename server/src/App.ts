@@ -7,9 +7,7 @@ import serverResponseMiddleware from './server-response-middleware/server-respon
 
 config();
 
-
 export class App {
-
   private readonly app: express.Express;
 
   public constructor() {
@@ -22,12 +20,10 @@ export class App {
     try {
       await sequelize.authenticate();
 
-      if (opts?.forceSync)
-        await this.forceDBSync();
+      if (opts?.forceSync) await this.forceDBSync();
 
       await this.app.listen(PORT);
       console.log(`time-tracking-system API running on PORT: ${PORT}`);
-
     } catch (e: any) {
       console.error('Error: ', e.message);
     }
@@ -48,7 +44,7 @@ export class App {
       cors({
         origin: 'http://localhost:8080',
         credentials: true,
-      }),
+      })
     );
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
@@ -62,5 +58,4 @@ export class App {
     /** Server response handler middleware */
     this.app.use(serverResponseMiddleware);
   };
-
 }

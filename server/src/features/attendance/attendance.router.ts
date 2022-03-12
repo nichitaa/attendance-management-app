@@ -2,6 +2,7 @@ import { AppRouter } from '../../routes/routes';
 import { Router } from 'express';
 import { AttendanceController } from './attendance.controller';
 import asyncErrorHandler from 'express-async-handler';
+import { verifyJwtToken } from '../../middleware/auth.middleware';
 
 export class AttendanceRouter implements AppRouter {
   private readonly router: Router;
@@ -16,9 +17,12 @@ export class AttendanceRouter implements AppRouter {
   }
 
   private initRoutes = (): void => {
-    this.router.route('/attendance')
-      .get(asyncErrorHandler(this.controller.getAll))
+    this.router
+      .route('/attendance')
+      .get(
+        asyncErrorHandler(verifyJwtToken),
+        asyncErrorHandler(this.controller.getAll)
+      )
       .post(asyncErrorHandler(this.controller.recordRegisteredTime));
   };
-
 }
