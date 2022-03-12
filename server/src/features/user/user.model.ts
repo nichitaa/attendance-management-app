@@ -11,6 +11,8 @@ export enum UserRoles {
 interface UserAttributes {
   id: number;
   departmentId: number;
+  fingerprintId: number;
+  fingerprintTemplate: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -42,6 +44,14 @@ export const UserModel =
         model: DepartmentModel,
         key: 'id',
       },
+      allowNull: false,
+    },
+    fingerprintId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    fingerprintTemplate: {
+      type: DataTypes.TEXT('long'),
       allowNull: false,
     },
     firstName: {
