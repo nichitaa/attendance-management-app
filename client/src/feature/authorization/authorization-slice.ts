@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 interface AuthorizationSlice {
-  bearerToken: string | undefined,
-  refreshToken: string | undefined,
-  isAuthorized: boolean,
-  userId: number,
-  email: string | undefined,
-  role: string | undefined,
+  bearerToken: string | undefined;
+  refreshToken: string | undefined;
+  isAuthorized: boolean;
+  userId: number;
+  email: string | undefined;
+  role: string | undefined;
 }
 
 const initialState: AuthorizationSlice = {
@@ -18,7 +18,8 @@ const authorizationSlice = createSlice({
   initialState,
   reducers: {
     setAuthorizedUser: (state, action) => {
-      const { accessToken, id, email, username, role, refreshToken } = action.payload;
+      const { accessToken, id, email, username, role, refreshToken } =
+        action.payload;
       state.bearerToken = accessToken;
       state.refreshToken = refreshToken;
       state.userId = id;

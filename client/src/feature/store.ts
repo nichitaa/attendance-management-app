@@ -1,5 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { APIMiddleware, APIReducer, APIReducerPath } from '@feature/api/base-api-slice';
+import {
+  APIMiddleware,
+  APIReducer,
+  APIReducerPath,
+} from '@feature/api/base-api-slice';
 import AuthorizationSlice from '@feature/authorization/authorization-slice';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
@@ -12,13 +16,15 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 
-
 const authPersistConfig = {
   key: 'attendance-management-auth',
   storage: storage,
 };
 
-const authPersistReducer = persistReducer(authPersistConfig, AuthorizationSlice.reducer);
+const authPersistReducer = persistReducer(
+  authPersistConfig,
+  AuthorizationSlice.reducer
+);
 
 const rootReducer = combineReducers({
   [AuthorizationSlice.name]: authPersistReducer,
@@ -36,7 +42,6 @@ export const setupStore = () => {
     reducer: rootReducer,
   });
 };
-
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;

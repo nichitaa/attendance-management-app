@@ -4,6 +4,7 @@ import cors from 'cors';
 import { routes } from './routes/routes';
 import sequelize from './sqlz';
 import serverResponseMiddleware from './server-response-middleware/server-response.middleware';
+import { dataImport } from './resources/data-import';
 
 config();
 
@@ -20,7 +21,10 @@ export class App {
     try {
       await sequelize.authenticate();
 
-      if (opts?.forceSync) await this.forceDBSync();
+      if (opts?.forceSync) {
+        await this.forceDBSync();
+        await this.importInitialData();
+      }
 
       await this.app.listen(PORT);
       console.log(`time-tracking-system API running on PORT: ${PORT}`);
@@ -37,6 +41,10 @@ export class App {
   private forceDBSync = async () => {
     await sequelize.sync({ force: true });
     console.log(`SEQUELIZE force synced database!`);
+  };
+
+  private importInitialData = async () => {
+    await dataImport();
   };
 
   private initAppMiddlewares = () => {

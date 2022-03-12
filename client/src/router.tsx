@@ -4,11 +4,16 @@ import { Navigate } from 'react-router-dom';
 import { Spin } from 'antd';
 
 // public
-const DashboardPage = lazy(() => import('@pages/Dashboard/DashboardPage'));
-
-// common
 const HomePage = lazy(() => import('@pages/Home/HomePage'));
 const LoginPage = lazy(() => import('@pages/Login/LoginPage'));
+
+// private
+const DashboardPage = lazy(() => import('@pages/Dashboard/DashboardPage'));
+const DepartmentsPage = lazy(
+  () => import('@pages/Departments/DepartmentsPage')
+);
+
+// common
 const PageNotFound = lazy(() => import('@pages/NotFound/PageNotFound'));
 
 export const routes: IRoutesConfig = {
@@ -30,6 +35,10 @@ export const routes: IRoutesConfig = {
       path: '/dashboard',
       component: <DashboardPage />,
     },
+    {
+      path: '/departments',
+      component: <DepartmentsPage />,
+    },
   ],
   common: [
     {
@@ -38,11 +47,11 @@ export const routes: IRoutesConfig = {
     },
     {
       path: '/asdf',
-      component: <p>asdf</p>
-    }
-    // {
-    //   path: '*',
-    //   component: <PageNotFound />,
-    // },
+      component: <p>asdf</p>,
+    },
+    {
+      path: '*',
+      component: <PageNotFound />,
+    },
   ],
 };

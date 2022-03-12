@@ -19,18 +19,14 @@ export class UserRouter implements AppRouter {
   private initRoutes = (): void => {
     this.router
       .route('/user')
-      .get(
-        asyncErrorHandler(verifyJwtToken),
-        asyncErrorHandler(this.controller.getAll)
-      )
+      .all(asyncErrorHandler(verifyJwtToken))
+      .get(asyncErrorHandler(this.controller.getAll))
       .post(asyncErrorHandler(this.controller.create));
 
     this.router
       .route('/user/:id')
-      .get(
-        asyncErrorHandler(verifyJwtToken),
-        asyncErrorHandler(this.controller.getByPk)
-      );
+      .all(asyncErrorHandler(verifyJwtToken))
+      .get(asyncErrorHandler(this.controller.getByPk));
 
     this.router
       .route('/auth/login')

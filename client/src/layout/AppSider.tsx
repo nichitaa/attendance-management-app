@@ -12,17 +12,16 @@ const { Sider } = Layout;
 interface MainProps {
   collapsed: boolean;
 
-  onCollapse(bool: boolean): void,
+  onCollapse(bool: boolean): void;
 }
 
 const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
-
   const { switcher, themes, currentTheme } = useThemeSwitcher();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [selectedMenuKey, setSelectedMenuKey] = useState('');
-  const { isAuthorized } = useAppSelector(s => s.authorization);
+  const { isAuthorized, role } = useAppSelector((s) => s.authorization);
 
   useEffect(() => {
     const key = location.pathname.split('/')[1]; // ['', 'main_route_name', '1']
@@ -38,29 +37,64 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
   };
 
   return (
-    <Sider onCollapse={onCollapse} collapsed={collapsed} collapsible={true} className={'app-sider'}>
+    <Sider
+      onCollapse={onCollapse}
+      collapsed={collapsed}
+      collapsible={true}
+      className={'app-sider'}
+    >
       <Menu mode={'inline'} selectedKeys={[selectedMenuKey]}>
-        {!isAuthorized
-          && <Menu.Item key={'home'} onClick={() => navigate('/home')} icon={<HomeOutlined />}>
+        {!isAuthorized && (
+          <Menu.Item
+            key={'home'}
+            onClick={() => navigate('/home')}
+            icon={<HomeOutlined />}
+          >
             Home
-          </Menu.Item>}
+          </Menu.Item>
+        )}
 
-        {isAuthorized &&
-          <Menu.Item key={'dashboard'} onClick={() => navigate('/dashboard')} icon={<HomeOutlined />}>
+        {isAuthorized && (
+          <Menu.Item
+            key={'dashboard'}
+            onClick={() => navigate('/dashboard')}
+            icon={<HomeOutlined />}
+          >
             Dashboard
-          </Menu.Item>}
+          </Menu.Item>
+        )}
 
-        {!isAuthorized
-          && <Menu.Item key={'login'} onClick={() => navigate('/login')} icon={<HomeOutlined />}>
+        {isAuthorized && role === 'admin' && (
+          <Menu.Item
+            key={'departments'}
+            onClick={() => navigate('/departments')}
+            icon={<HomeOutlined />}
+          >
+            Departments
+          </Menu.Item>
+        )}
+
+        {!isAuthorized && (
+          <Menu.Item
+            key={'login'}
+            onClick={() => navigate('/login')}
+            icon={<HomeOutlined />}
+          >
             Login
-          </Menu.Item>}
+          </Menu.Item>
+        )}
 
-        {isAuthorized &&
+        {isAuthorized && (
           <Menu.Item key={'login'} onClick={logout} icon={<HomeOutlined />}>
             Logout
-          </Menu.Item>}
+          </Menu.Item>
+        )}
 
-        <Menu.Item key={'theme-toggle'} icon={<BgColorsOutlined />} onClick={handleThemeChange}>
+        <Menu.Item
+          key={'theme-toggle'}
+          icon={<BgColorsOutlined />}
+          onClick={handleThemeChange}
+        >
           {currentTheme === 'light' ? 'Dark Theme' : 'Light Theme'}
         </Menu.Item>
       </Menu>

@@ -2,10 +2,10 @@ import { Model, DataTypes, Optional, BelongsToGetAssociationMixin } from 'sequel
 import sequelize from '../../sqlz';
 import { DepartmentInstance, DepartmentModel } from '../department/department.model';
 
-enum UserRoles {
+export enum UserRoles {
   ADMIN = 'admin',
-  MANAGER = 'manager',
-  REGULAR = 'regular'
+  DEPARTMENT_ADMIN = 'department_admin',
+  DEFAULT = 'default'
 }
 
 interface UserAttributes {

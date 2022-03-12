@@ -3,8 +3,12 @@ import { SuccessResponse } from './success-response';
 import { ErrorException } from './error-exception';
 import { EmptyResultError, ValidationError } from 'sequelize';
 
-const serverResponseMiddleware = (serverResponse: unknown, req: Request, res: Response, next: NextFunction) => {
-
+const serverResponseMiddleware = (
+  serverResponse: unknown,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // server success response
   if (serverResponse instanceof SuccessResponse) {
     return res.status(serverResponse.statusCode).json({
@@ -18,7 +22,7 @@ const serverResponseMiddleware = (serverResponse: unknown, req: Request, res: Re
   if (serverResponse instanceof ValidationError) {
     return res.status(400).json({
       isSuccess: false,
-      error: serverResponse.errors,
+      error: serverResponse.errors[0].message,
     });
   }
 
@@ -41,10 +45,9 @@ const serverResponseMiddleware = (serverResponse: unknown, req: Request, res: Re
   return res.status(500).json({
     isSuccess: false,
     instanceOfResponse: typeof serverResponse,
-    message: 'unhandled server error/response',
+    error: 'unhandled server error/response',
     data: serverResponse,
   });
-
 };
 
 export default serverResponseMiddleware;
