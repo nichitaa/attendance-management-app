@@ -63,7 +63,7 @@ export class UserController {
     if (!user)
       throw new ErrorException(
         404,
-        `User with email${req.body.email} was not found!`
+        `User with email: ${req.body.email} was not found!`
       );
 
     const passwordIsValid = bcrypt.compareSync(

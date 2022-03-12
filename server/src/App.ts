@@ -42,7 +42,7 @@ export class App {
   private initAppMiddlewares = () => {
     this.app.use(
       cors({
-        origin: 'http://localhost:8080',
+        origin: 'http://localhost:3000',
         credentials: true,
       })
     );

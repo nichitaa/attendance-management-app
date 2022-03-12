@@ -5,6 +5,8 @@ import { Provider as StoreProvider } from 'react-redux';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher';
 import { setupStore } from '@feature/store';
 import App from './App';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
 
 
 /**
@@ -17,6 +19,7 @@ const themes = {
 };
 
 const store = setupStore();
+const persistor = persistStore(store);
 
 const app = (
   <ThemeSwitcherProvider
@@ -25,7 +28,9 @@ const app = (
     insertionPoint='styles-insertion-point'>
     <BrowserRouter>
       <StoreProvider store={store}>
-        <App />
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
       </StoreProvider>
     </BrowserRouter>
   </ThemeSwitcherProvider>
