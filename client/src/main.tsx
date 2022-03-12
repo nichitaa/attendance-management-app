@@ -8,7 +8,6 @@ import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 
-
 /**
  * https://vitejs.dev/guide/assets.html#the-public-directory
  * public directory is served as root path during dev and copied to the root of dist on build
@@ -25,7 +24,8 @@ const app = (
   <ThemeSwitcherProvider
     themeMap={themes}
     defaultTheme={'dark'}
-    insertionPoint='styles-insertion-point'>
+    insertionPoint='styles-insertion-point'
+  >
     <BrowserRouter>
       <StoreProvider store={store}>
         <PersistGate persistor={persistor}>

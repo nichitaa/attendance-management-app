@@ -19,10 +19,13 @@ export class DepartmentRouter implements AppRouter {
   private initRoutes = (): void => {
     this.router
       .route('/department')
-      .get(
-        asyncErrorHandler(verifyJwtToken),
-        asyncErrorHandler(this.controller.getAll)
-      )
+      .all(asyncErrorHandler(verifyJwtToken))
+      .get(asyncErrorHandler(this.controller.getAll))
       .post(asyncErrorHandler(this.controller.create));
+
+    this.router
+      .route('/department/:id')
+      .all(verifyJwtToken)
+      .patch(asyncErrorHandler(this.controller.update));
   };
 }

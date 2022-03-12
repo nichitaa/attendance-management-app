@@ -1,11 +1,13 @@
 import { baseAPI } from './base-api-slice';
 
-
-baseAPI.enhanceEndpoints({addTagTypes: ['Users']})
+baseAPI.enhanceEndpoints({ addTagTypes: ['Users'] });
 
 const userAPI = baseAPI.injectEndpoints({
   endpoints: (build) => ({
-    loginUser: build.mutation<{ isSuccess: boolean; message?: string; error?: string, data?: any }, {email: string, password: string}>({
+    loginUser: build.mutation<
+      { isSuccess: boolean; message?: string; error?: string; data?: any },
+      { email: string; password: string }
+    >({
       query: (user) => ({
         url: '/auth/login',
         method: 'POST',
@@ -17,9 +19,9 @@ const userAPI = baseAPI.injectEndpoints({
         url: `/auth/users`,
       }),
       // @ts-expect-error
-      providesTags: ['Users']
+      providesTags: ['Users'],
     }),
-  })
+  }),
 });
 
 export default userAPI;

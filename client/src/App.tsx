@@ -4,7 +4,7 @@ import AppLayout from './layout/AppLayout';
 import { useAppSelector } from '@hooks/rtk-hooks';
 
 const App = () => {
-  const { isAuthorized } = useAppSelector(s => s.authorization);
+  const { isAuthorized } = useAppSelector((s) => s.authorization);
 
   return (
     <AppLayout>

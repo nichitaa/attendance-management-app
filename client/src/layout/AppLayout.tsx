@@ -2,7 +2,6 @@ import { Layout } from 'antd';
 import AppSider from './AppSider';
 import { FC, useState } from 'react';
 
-
 const AppLayout: FC = (props) => {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -12,8 +11,9 @@ const AppLayout: FC = (props) => {
         collapsed={collapsed}
         onCollapse={(bool) => setCollapsed(bool)}
       />
-      <Layout className='site-layout'
-              style={{ marginLeft: collapsed ? 83 : 200, transition: 'all 0.3s' }}
+      <Layout
+        className='site-layout'
+        style={{ marginLeft: collapsed ? 83 : 200, transition: 'all 0.3s' }}
       >
         <Layout.Content style={{ overflow: 'initial' }}>
           <div
