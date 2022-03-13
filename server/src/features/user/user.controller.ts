@@ -39,6 +39,16 @@ export class UserController {
     const { body } = req;
     if (!body.password) throw new ErrorException(400, 'Password is required!');
 
+    const userWithoutFingerprint = await UserModel.findOne({
+      where: { fingerprintId: null },
+    });
+
+    if (userWithoutFingerprint)
+      throw new ErrorException(
+        400,
+        `Please add a fingerprint for user: ${userWithoutFingerprint.id} - ${userWithoutFingerprint.email} before enrolling a new user!`
+      );
+
     const userDTO: UserCreationAttributes = {
       ...body,
       password: bcrypt.hashSync(body.password, 8),
@@ -64,18 +74,26 @@ export class UserController {
         `No fingerprintId or fingerprintTemplate was registered!`
       );
 
-    const lastUser = await UserModel.findOne({
-      limit: 1,
-      order: [['createdAt', 'DESC']],
+    const userWithoutFingerprint = await UserModel.findOne({
+      where: { fingerprintId: null },
     });
 
-    await lastUser!.update({ fingerprintId, fingerprintTemplate });
-    await lastUser!.save();
+    if (!userWithoutFingerprint)
+      throw new ErrorException(
+        400,
+        `All current enrolled users has registered fingerprints!`
+      );
+
+    await userWithoutFingerprint!.update({
+      fingerprintId,
+      fingerprintTemplate,
+    });
+    await userWithoutFingerprint!.save();
 
     return next(
       new SuccessResponse({
         message: `Successfully added fingerprintId and fingerprintTemplate for user: ${
-          lastUser!.id
+          userWithoutFingerprint!.id
         }`,
       })
     );

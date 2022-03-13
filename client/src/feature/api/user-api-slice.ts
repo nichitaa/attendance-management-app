@@ -16,11 +16,13 @@ const userAPI = baseAPI.injectEndpoints({
     }),
     fetchAllUsers: build.query({
       query: () => ({
-        url: `/auth/users`,
+        url: `/user`,
       }),
       // @ts-expect-error
+      transformResponse: (response) => response.data ?? [],
+      // @ts-expect-error
       providesTags: ['Users'],
-    }),
+    })
   }),
 });
 

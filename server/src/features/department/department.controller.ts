@@ -16,8 +16,6 @@ export class DepartmentController {
   ): Promise<any> => {
     const departments = await DepartmentModel.findAll({
       raw: true,
-      nest: true,
-      include: [{ all: true }],
     });
     return next(new SuccessResponse({ data: departments }));
   };
