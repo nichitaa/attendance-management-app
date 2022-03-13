@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
-import { UserCreationAttributes, UserModel } from './user.model';
+import { UserCreationAttributes, UserModel, UserRoles } from './user.model';
 import { SuccessResponse } from '../../server-response-middleware/success-response';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
@@ -39,6 +39,16 @@ export class UserController {
     const { body } = req;
     if (!body.password) throw new ErrorException(400, 'Password is required!');
 
+    const userWithoutFingerprint = await UserModel.findOne({
+      where: { fingerprintId: null },
+    });
+
+    if (userWithoutFingerprint)
+      throw new ErrorException(
+        400,
+        `Please add a fingerprint for user: ${userWithoutFingerprint.id} - ${userWithoutFingerprint.email} before enrolling a new user!`
+      );
+
     const userDTO: UserCreationAttributes = {
       ...body,
       password: bcrypt.hashSync(body.password, 8),
@@ -49,6 +59,44 @@ export class UserController {
     const user = await UserModel.create(userDTO, { raw: true });
 
     return next(new SuccessResponse({ data: user }));
+  };
+
+  public addFingerprintForLastUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    const { fingerprintId, fingerprintTemplate } = req.body;
+
+    if (!fingerprintId || !fingerprintTemplate)
+      throw new ErrorException(
+        400,
+        `No fingerprintId or fingerprintTemplate was registered!`
+      );
+
+    const userWithoutFingerprint = await UserModel.findOne({
+      where: { fingerprintId: null },
+    });
+
+    if (!userWithoutFingerprint)
+      throw new ErrorException(
+        400,
+        `All current enrolled users has registered fingerprints!`
+      );
+
+    await userWithoutFingerprint!.update({
+      fingerprintId,
+      fingerprintTemplate,
+    });
+    await userWithoutFingerprint!.save();
+
+    return next(
+      new SuccessResponse({
+        message: `Successfully added fingerprintId and fingerprintTemplate for user: ${
+          userWithoutFingerprint!.id
+        }`,
+      })
+    );
   };
 
   public login = async (

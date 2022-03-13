@@ -12,6 +12,7 @@ const DashboardPage = lazy(() => import('@pages/Dashboard/DashboardPage'));
 const DepartmentsPage = lazy(
   () => import('@pages/Departments/DepartmentsPage')
 );
+const EnrollPage = lazy(() => import('@pages/Enroll/EnrollPage'));
 
 // common
 const PageNotFound = lazy(() => import('@pages/NotFound/PageNotFound'));
@@ -39,15 +40,15 @@ export const routes: IRoutesConfig = {
       path: '/departments',
       component: <DepartmentsPage />,
     },
+    {
+      path: '/enroll',
+      component: <EnrollPage />,
+    },
   ],
   common: [
     {
       path: '/',
       component: <Navigate to={'/home'} />,
-    },
-    {
-      path: '/asdf',
-      component: <p>asdf</p>,
     },
     {
       path: '*',

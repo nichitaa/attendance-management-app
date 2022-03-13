@@ -2,7 +2,14 @@ import { FC, useEffect, useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './sider.less';
-import { HomeOutlined, BgColorsOutlined } from '@ant-design/icons';
+import {
+  HomeOutlined,
+  BgColorsOutlined,
+  IdcardOutlined,
+  AppstoreAddOutlined,
+  LogoutOutlined,
+  LoginOutlined,
+} from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import { useAppDispatch, useAppSelector } from '@hooks/rtk-hooks';
 import { clearUserState } from '@feature/authorization/authorization-slice';
@@ -68,9 +75,19 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
           <Menu.Item
             key={'departments'}
             onClick={() => navigate('/departments')}
-            icon={<HomeOutlined />}
+            icon={<AppstoreAddOutlined />}
           >
             Departments
+          </Menu.Item>
+        )}
+
+        {isAuthorized && role === 'admin' && (
+          <Menu.Item
+            key={'enroll'}
+            onClick={() => navigate('/enroll')}
+            icon={<IdcardOutlined />}
+          >
+            Enroll
           </Menu.Item>
         )}
 
@@ -78,14 +95,14 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
           <Menu.Item
             key={'login'}
             onClick={() => navigate('/login')}
-            icon={<HomeOutlined />}
+            icon={<LoginOutlined />}
           >
             Login
           </Menu.Item>
         )}
 
         {isAuthorized && (
-          <Menu.Item key={'login'} onClick={logout} icon={<HomeOutlined />}>
+          <Menu.Item key={'login'} onClick={logout} icon={<LogoutOutlined />}>
             Logout
           </Menu.Item>
         )}

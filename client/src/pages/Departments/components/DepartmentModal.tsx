@@ -16,10 +16,10 @@ const DepartmentModal: FC<MainProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [create, { isLoading: isCreateLoading }] =
-    departmentsAPI.useCreateMutation();
+    departmentsAPI.useCreateDepartmentMutation();
 
   const [update, { isLoading: isUpdateLoading }] =
-    departmentsAPI.useUpdateMutation();
+    departmentsAPI.useUpdateDepartmentMutation();
 
   const onFinish = async (values) => {
     let response;
@@ -43,49 +43,47 @@ const DepartmentModal: FC<MainProps> = ({
   };
 
   return (
-    <>
-      <Modal
-        title={'department'}
-        width={500}
-        visible={isVisible}
-        footer={null}
-        onCancel={onModalClose}
+    <Modal
+      title={'department'}
+      width={500}
+      visible={isVisible}
+      footer={null}
+      onCancel={onModalClose}
+    >
+      <Form
+        form={form}
+        labelAlign={'left'}
+        labelCol={{ span: 7 }}
+        wrapperCol={{ span: 17 }}
+        onFinish={onFinish}
+        initialValues={department ? { ...department } : undefined}
       >
-        <Form
-          form={form}
-          labelAlign={'left'}
-          labelCol={{ span: 7 }}
-          wrapperCol={{ span: 17 }}
-          onFinish={onFinish}
-          initialValues={department ? { ...department } : undefined}
-        >
-          {department && (
-            <Form.Item label={'ID'} name={'id'}>
-              <Input disabled={true} placeholder={'ID'} />
-            </Form.Item>
-          )}
+        {department && (
+          <Form.Item label={'ID'} name={'id'}>
+            <Input disabled={true} placeholder={'ID'} />
+          </Form.Item>
+        )}
 
-          <Form.Item
-            label={'Name'}
-            name={'name'}
-            rules={[{ required: true, message: 'Department Name is required' }]}
-          >
-            <Input placeholder={'Department Name'} />
-          </Form.Item>
-          <Form.Item wrapperCol={{ span: 24 }}>
-            <Row justify={'end'}>
-              <Button
-                type={'primary'}
-                htmlType={'submit'}
-                loading={isCreateLoading || isUpdateLoading}
-              >
-                Save
-              </Button>
-            </Row>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
+        <Form.Item
+          label={'Name'}
+          name={'name'}
+          rules={[{ required: true, message: 'Department Name is required' }]}
+        >
+          <Input placeholder={'Department Name'} />
+        </Form.Item>
+        <Form.Item wrapperCol={{ span: 24 }}>
+          <Row justify={'end'}>
+            <Button
+              type={'primary'}
+              htmlType={'submit'}
+              loading={isCreateLoading || isUpdateLoading}
+            >
+              Save
+            </Button>
+          </Row>
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 };
 
