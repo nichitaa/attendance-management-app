@@ -23,6 +23,11 @@ export class UserRouter implements AppRouter {
       .get(asyncErrorHandler(this.controller.getAll))
       .post(asyncErrorHandler(this.controller.create));
 
+    // register fingerprintId and template for the last created user
+    this.router
+      .route('/add-fingerprint')
+      .post(asyncErrorHandler(this.controller.addFingerprintForLastUser))
+
     this.router
       .route('/user/:id')
       .all(asyncErrorHandler(verifyJwtToken))

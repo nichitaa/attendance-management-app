@@ -51,6 +51,36 @@ export class UserController {
     return next(new SuccessResponse({ data: user }));
   };
 
+  public addFingerprintForLastUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    const { fingerprintId, fingerprintTemplate } = req.body;
+
+    if (!fingerprintId || !fingerprintTemplate)
+      throw new ErrorException(
+        400,
+        `No fingerprintId or fingerprintTemplate was registered!`
+      );
+
+    const lastUser = await UserModel.findOne({
+      limit: 1,
+      order: [['createdAt', 'DESC']],
+    });
+
+    await lastUser!.update({ fingerprintId, fingerprintTemplate });
+    await lastUser!.save();
+
+    return next(
+      new SuccessResponse({
+        message: `Successfully added fingerprintId and fingerprintTemplate for user: ${
+          lastUser!.id
+        }`,
+      })
+    );
+  };
+
   public login = async (
     req: Request,
     res: Response,

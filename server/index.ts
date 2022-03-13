@@ -2,7 +2,7 @@ import { App } from './src/App';
 
 class APIServer {
 
-  static readonly forceSync = true;
+  static readonly forceSync = false;
 
   public static run = async () => {
     const app = new App();
