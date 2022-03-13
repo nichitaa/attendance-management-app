@@ -1,6 +1,7 @@
 import userAPI from '@feature/api/user-api-slice';
 import { Button, Row, Space, Table, Tag } from 'antd';
 import renderDateCell from '../../../utils/renderDateTimeCell';
+import { UserRoles } from '../../../types/enums';
 
 const { Column } = Table;
 const UsersTable = () => {
@@ -17,14 +18,31 @@ const UsersTable = () => {
         scroll={{ x: 'max-content' }}
       >
         <Column title={'ID'} dataIndex={'id'} key={'id'} fixed={'left'} />
-        <Column title={'Email'} dataIndex={'email'} key={'email'} fixed={'left'} />
+        <Column
+          title={'Email'}
+          dataIndex={'email'}
+          key={'email'}
+          fixed={'left'}
+        />
         <Column
           title={'First name'}
           dataIndex={'firstName'}
           key={'firstName'}
         />
         <Column title={'Last name'} dataIndex={'lastName'} key={'lastName'} />
-        <Column title={'Role'} dataIndex={'role'} key={'role'} />
+        <Column
+          title={'Role'}
+          dataIndex={'role'}
+          key={'role'}
+          render={(role) => {
+            if (role === UserRoles.ADMIN)
+              return <Tag color={'purple'}>Organization admin</Tag>;
+            if (role === UserRoles.DEPARTMENT_ADMIN)
+              return <Tag color={'gold'}>Department admin</Tag>;
+            if (role === UserRoles.DEFAULT)
+              return <Tag color={'blue'}>Regular user</Tag>;
+          }}
+        />
         <Column
           title={'Date of birth'}
           dataIndex={'dateOfBirth'}
@@ -48,6 +66,7 @@ const UsersTable = () => {
           title={'Created at'}
           dataIndex={'createdAt'}
           key={'createdAt'}
+          render={renderDateCell}
         />
         <Column
           title={'Department'}

@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
-import { UserCreationAttributes, UserModel } from './user.model';
+import { UserCreationAttributes, UserModel, UserRoles } from './user.model';
 import { SuccessResponse } from '../../server-response-middleware/success-response';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
