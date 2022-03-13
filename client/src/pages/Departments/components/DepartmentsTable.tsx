@@ -10,7 +10,7 @@ interface MainProps {
 }
 
 const DepartmentsTable: FC<MainProps> = ({ openUpdateRecordModal }) => {
-  const { data, isLoading } = departmentsAPI.useFetchAllQuery(undefined);
+  const { data, isLoading } = departmentsAPI.useFetchAllDepartmentsQuery(undefined);
 
   return (
     <Row gutter={10}>

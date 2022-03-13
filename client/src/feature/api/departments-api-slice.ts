@@ -5,7 +5,7 @@ baseAPI.enhanceEndpoints({ addTagTypes: ['Departments'] });
 
 const departmentsAPI = baseAPI.injectEndpoints({
   endpoints: (build) => ({
-    fetchAll: build.query<IAPIResponse<any>, undefined>({
+    fetchAllDepartments: build.query<any[], undefined>({
       query: () => ({
         url: `/department`,
       }),
@@ -14,7 +14,7 @@ const departmentsAPI = baseAPI.injectEndpoints({
       // @ts-expect-error
       providesTags: ['Departments'],
     }),
-    create: build.mutation<IAPIResponse<any>, { name: string }>({
+    createDepartment: build.mutation<IAPIResponse<any>, { name: string }>({
       query: (body) => ({
         url: '/department',
         method: 'POST',
@@ -23,7 +23,7 @@ const departmentsAPI = baseAPI.injectEndpoints({
       // @ts-expect-error
       invalidatesTags: ['Departments'],
     }),
-    update: build.mutation<IAPIResponse<any>, { name: string; id: number }>({
+    updateDepartment: build.mutation<IAPIResponse<any>, { name: string; id: number }>({
       query: (body) => ({
         url: `/department/${body.id}`,
         method: 'PATCH',
