@@ -3,20 +3,45 @@ import { Op } from 'sequelize';
 import { NextFunction, Request, Response } from 'express';
 import { SuccessResponse } from '../../server-response-middleware/success-response';
 import { AttendanceModel } from './attendance.model';
+import { UserModel } from '../user/user.model';
+import { ErrorException } from '../../server-response-middleware/error-exception';
 
 config();
 
 export class AttendanceController {
-  public constructor() {
-  }
+  public constructor() {}
 
-  public getAll = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const attendances = await AttendanceModel.findAll({ raw: true, nest: true, include: [{ all: true }] });
+  public getAll = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    const attendances = await AttendanceModel.findAll({
+      raw: true,
+      nest: true,
+      include: [{ all: true }],
+    });
     return next(new SuccessResponse({ data: attendances }));
   };
 
-  public recordRegisteredTime = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const { userId } = req.body;
+  public recordRegisteredTime = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    let { fingerprintId } = req.body;
+    fingerprintId = parseInt(fingerprintId);
+
+    const user = await UserModel.findOne({ where: { fingerprintId } });
+
+    if (!user) {
+      throw new ErrorException(
+        404,
+        `User with fingerprint ${fingerprintId} was not found in database!`
+      );
+    }
+
+    const userId = user.id;
 
     /** If already registered once */
     let query = {
@@ -30,7 +55,9 @@ export class AttendanceController {
         },
       },
     };
-    const prevAttendanceRecord = await AttendanceModel.findOne({ where: query });
+    const prevAttendanceRecord = await AttendanceModel.findOne({
+      where: query,
+    });
 
     if (prevAttendanceRecord) {
       const startTime = new Date(prevAttendanceRecord.startTime);
@@ -39,15 +66,24 @@ export class AttendanceController {
       console.log({ totalRegisteredTime });
       await prevAttendanceRecord.update({ endTime, totalRegisteredTime });
       await prevAttendanceRecord.save();
-      return next(new SuccessResponse({ message: `Total registered time: ${totalRegisteredTime} for userId: ${userId}` }));
+      return next(
+        new SuccessResponse({
+          message: `Total registered time: ${totalRegisteredTime} for userId: ${userId}`,
+        })
+      );
     }
 
     /** First time registration */
-    const attendanceRecord = await AttendanceModel.create({ userId, startTime: new Date() }, { raw: true });
+    const attendanceRecord = await AttendanceModel.create(
+      { userId, startTime: new Date() },
+      { raw: true }
+    );
 
-    return next(new SuccessResponse({
-      message: `Created attendance record for userId: ${userId}`,
-      data: attendanceRecord,
-    }));
+    return next(
+      new SuccessResponse({
+        message: `Created attendance record for userId: ${userId}`,
+        data: attendanceRecord,
+      })
+    );
   };
 }

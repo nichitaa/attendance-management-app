@@ -74,6 +74,17 @@ export class UserController {
         `No fingerprintId or fingerprintTemplate was registered!`
       );
 
+    const userWithSameFingerprintId = await UserModel.findOne({
+      where: { fingerprintId },
+    });
+
+    if (userWithSameFingerprintId) {
+      throw new ErrorException(
+        400,
+        `User with fingerprint id ${fingerprintId} is already registered!`
+      );
+    }
+
     const userWithoutFingerprint = await UserModel.findOne({
       where: { fingerprintId: null },
     });
