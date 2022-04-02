@@ -1,15 +1,6 @@
 import { useState } from 'react';
 import attendanceAPI from '@feature/api/attendance-api-slice';
-import {
-  Button,
-  Card,
-  Col,
-  DatePicker,
-  Divider,
-  Form,
-  Row,
-  Select,
-} from 'antd';
+import { Button, Col, DatePicker, Form, Row, Select } from 'antd';
 import { PageHeader } from '@shared/index';
 import userAPI from '@feature/api/user-api-slice';
 import departmentsAPI from '@feature/api/departments-api-slice';
@@ -53,60 +44,58 @@ const AttendanceReportPage = () => {
 
   return (
     <>
-      <PageHeader title={'Admin attendance report'} />
-      <Row>
-        <Col span={24}>
-          <Card>
-            <Form form={form} onFinish={onFinish}>
-              <Row gutter={[8, 8]}>
-                <Col span={6}>
-                  <Form.Item name={'departmentId'} style={{marginBottom: 0}}>
-                    <Select
-                      loading={isDepartmentsLoading}
-                      placeholder={'Select a department'}
-                      allowClear={true}
-                    >
-                      {(departments as any[])?.map((el) => (
-                        <Option value={el.id} key={el.id}>
-                          {el.name}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item name={'userId'} style={{marginBottom: 0}}>
-                    <Select
-                      loading={isUsersLoading}
-                      placeholder={'Select a user'}
-                      allowClear={true}
-                    >
-                      {(users as any[])?.map((el) => (
-                        <Option value={el.id} key={el.id}>
-                          {el.email} | {el.firstName} - {el.lastName}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={6}>
-                  <Form.Item name={'dateRange'} style={{marginBottom: 0}}>
-                    <RangePicker style={{ width: '100%' }} />
-                  </Form.Item>
-                </Col>
-                <Col span={3} offset={3}>
-                  <Form.Item style={{marginBottom: 0}}>
-                    <Button block={true} type={'primary'} htmlType={'submit'}>
-                      Generate
-                    </Button>
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Form>
-          </Card>
-        </Col>
-      </Row>
-      <Divider />
+      <PageHeader
+        title={'Admin attendance report'}
+        extra={[
+          <Form form={form} onFinish={onFinish}>
+            <Row gutter={[8, 8]}>
+              <Col>
+                <Form.Item name={'departmentId'} style={{ marginBottom: 0 }}>
+                  <Select
+                    loading={isDepartmentsLoading}
+                    placeholder={'Select a department'}
+                    allowClear={true}
+                  >
+                    {(departments as any[])?.map((el) => (
+                      <Option value={el.id} key={el.id}>
+                        {el.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item name={'userId'} style={{ marginBottom: 0 }}>
+                  <Select
+                    loading={isUsersLoading}
+                    placeholder={'Select a user'}
+                    allowClear={true}
+                  >
+                    {(users as any[])?.map((el) => (
+                      <Option value={el.id} key={el.id}>
+                        {el.email} | {el.firstName} - {el.lastName}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item name={'dateRange'} style={{ marginBottom: 0 }}>
+                  <RangePicker style={{ width: '100%' }} />
+                </Form.Item>
+              </Col>
+              <Col>
+                <Form.Item style={{ marginBottom: 0 }}>
+                  <Button block={true} type={'primary'} htmlType={'submit'}>
+                    Generate
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>,
+        ]}
+      />
+      {/*<Divider />*/}
       <AttendanceReportTable
         isAdminReport={true}
         loading={isAttendancesLoading}

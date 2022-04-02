@@ -1,7 +1,7 @@
 import { PageHeader } from '@shared/index';
 import { EnrollModal, UsersTable } from './components';
 import { useState } from 'react';
-import { Button, message, Space } from 'antd';
+import { Button, message } from 'antd';
 import userAPI from '@feature/api/user-api-slice';
 import { random } from '../../utils/random';
 
@@ -28,19 +28,22 @@ const EnrollPage = () => {
 
   return (
     <>
-      <PageHeader title={'Enroll'} />
-      <Space style={{ marginBottom: 16 }}>
-        <Button type={'primary'} onClick={openModal}>
-          Enroll new user
-        </Button>
-        <Button
-          onClick={registerFingerprint}
-          disabled={isRegisterFpLoading}
-          loading={isRegisterFpLoading}
-        >
-          Register fingerprint
-        </Button>
-      </Space>
+      <PageHeader
+        title={'Enroll'}
+        extra={[
+          <Button
+            key={'register-fingerprint'}
+            onClick={registerFingerprint}
+            disabled={isRegisterFpLoading}
+            loading={isRegisterFpLoading}
+          >
+            Register fingerprint
+          </Button>,
+          <Button key={'enroll-user'} type={'primary'} onClick={openModal}>
+            Enroll new user
+          </Button>,
+        ]}
+      />
       <EnrollModal onModalClose={closeModal} isVisible={isModalVisible} />
       <UsersTable />
     </>

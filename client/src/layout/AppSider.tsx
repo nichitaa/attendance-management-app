@@ -3,12 +3,12 @@ import { Layout, Menu } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './sider.less';
 import {
-  HomeOutlined,
-  BgColorsOutlined,
-  IdcardOutlined,
   AppstoreAddOutlined,
-  LogoutOutlined,
+  BgColorsOutlined,
+  HomeOutlined,
+  IdcardOutlined,
   LoginOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import { useAppDispatch, useAppSelector } from '@hooks/rtk-hooks';
@@ -102,13 +102,22 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
         )}
 
         {isAuthorized && role === 'admin' && (
-          <Menu.Item
-            key={'attendance'}
-            onClick={() => navigate(`/attendance`)}
-            icon={<IdcardOutlined />}
-          >
-            Attendance report
-          </Menu.Item>
+          <>
+            <Menu.Item
+              key={'attendance'}
+              onClick={() => navigate(`/attendance`)}
+              icon={<IdcardOutlined />}
+            >
+              General Attendance report
+            </Menu.Item>
+            <Menu.Item
+              key={'department-attendance'}
+              onClick={() => navigate(`/department-attendance`)}
+              icon={<IdcardOutlined />}
+            >
+              Departments attendance report
+            </Menu.Item>
+          </>
         )}
 
         {!isAuthorized && (

@@ -29,6 +29,7 @@ export class UserController {
       nest: true,
       include: [{ model: DepartmentModel }],
     });
+    console.log({users});
     return next(new SuccessResponse({ data: users }));
   };
 

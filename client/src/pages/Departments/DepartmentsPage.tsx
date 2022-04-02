@@ -1,7 +1,7 @@
 import { DepartmentsTable } from './components';
 import { PageHeader } from '@shared/index';
 import { useState } from 'react';
-import { Button, Space } from 'antd';
+import { Button } from 'antd';
 import DepartmentModal from './components/DepartmentModal';
 
 const DepartmentsPage = () => {
@@ -24,12 +24,14 @@ const DepartmentsPage = () => {
 
   return (
     <>
-      <PageHeader title={'Departments'} />
-      <Space style={{ marginBottom: 16 }}>
-        <Button type={'primary'} onClick={openCreateModal}>
-          Create
-        </Button>
-      </Space>
+      <PageHeader
+        title={'Departments'}
+        extra={[
+          <Button type={'primary'} onClick={openCreateModal}>
+            New department
+          </Button>,
+        ]}
+      />
       <DepartmentsTable openUpdateRecordModal={openUpdateModal} />
       <DepartmentModal
         isVisible={isCreateModalVisible}

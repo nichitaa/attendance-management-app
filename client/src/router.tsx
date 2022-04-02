@@ -19,6 +19,10 @@ const PersonalAttendanceReportPage = lazy(
 const AttendanceReportPage = lazy(
   () => import('@pages/AttendanceReport/AttendanceReportPage')
 );
+const DepartmentAttendanceReportPage = lazy(
+  () =>
+    import('@pages/DepartmentAttendanceReport/DepartmentAttendanceReportPage')
+);
 
 // common
 const PageNotFound = lazy(() => import('@pages/NotFound/PageNotFound'));
@@ -57,6 +61,10 @@ export const routes: IRoutesConfig = {
     {
       path: '/attendance/:id',
       component: <PersonalAttendanceReportPage />,
+    },
+    {
+      path: '/department-attendance',
+      component: <DepartmentAttendanceReportPage />,
     },
   ],
   common: [

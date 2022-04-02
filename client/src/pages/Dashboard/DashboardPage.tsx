@@ -1,6 +1,7 @@
 import { Button, message } from 'antd';
 import { useAppSelector } from '@hooks/rtk-hooks';
 import attendanceAPI from '@feature/api/attendance-api-slice';
+import { PageHeader } from '@shared/index';
 
 const DashboardPage = () => {
   const { fingerprintId } = useAppSelector((s) => s.authorization);
@@ -20,14 +21,19 @@ const DashboardPage = () => {
 
   return (
     <>
-      <Button
-        type={'primary'}
-        onClick={registerAttendanceHandler}
-        loading={isRegisterAttendanceLoading}
-        disabled={isRegisterAttendanceLoading}
-      >
-        Register attendance
-      </Button>
+      <PageHeader
+        title={'Dashboard'}
+        extra={[
+          <Button
+            type={'primary'}
+            onClick={registerAttendanceHandler}
+            loading={isRegisterAttendanceLoading}
+            disabled={isRegisterAttendanceLoading}
+          >
+            Register attendance
+          </Button>,
+        ]}
+      />
     </>
   );
 };
