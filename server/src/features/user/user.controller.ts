@@ -139,6 +139,7 @@ export class UserController {
       id: user.id,
       email: user.email,
       role: user.role,
+      fingerprintId: user.fingerprintId,
       accessToken: token,
       refreshToken: refreshToken,
     };

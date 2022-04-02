@@ -29,20 +29,19 @@ const EnrollModal: FC<MainProps> = ({ isVisible, onModalClose }) => {
     userAPI.useCreateUserMutation();
 
   const onFinish = async (values) => {
-    console.log({ values });
     const response = await create({
       ...values,
       dateOfBirth: values.dateOfBirth.toISOString(),
     });
-    console.log({ response });
+
     if ('error' in response) {
       return message.error(response['error']['data'].error, 3);
     }
-    onModalClose();
+    closeModal();
     return message.success(response.data.message, 3);
   };
 
-  const onCancel = async () => {
+  const closeModal = () => {
     form.resetFields();
     onModalClose();
   };
@@ -54,7 +53,7 @@ const EnrollModal: FC<MainProps> = ({ isVisible, onModalClose }) => {
       style={{ top: 20 }}
       visible={isVisible}
       footer={null}
-      onCancel={onCancel}
+      onCancel={closeModal}
     >
       <Form
         form={form}

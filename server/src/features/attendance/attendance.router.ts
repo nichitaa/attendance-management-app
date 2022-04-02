@@ -21,8 +21,13 @@ export class AttendanceRouter implements AppRouter {
       .route('/attendance')
       .get(
         asyncErrorHandler(verifyJwtToken),
-        asyncErrorHandler(this.controller.getAll)
+        asyncErrorHandler(this.controller.getAllAttendances)
       )
       .post(asyncErrorHandler(this.controller.recordRegisteredTime));
+
+    this.router
+      .route(`/attendance/:id`)
+      .all(asyncErrorHandler(verifyJwtToken))
+      .get(asyncErrorHandler(this.controller.getAttendanceByUser))
   };
 }

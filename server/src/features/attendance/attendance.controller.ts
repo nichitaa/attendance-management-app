@@ -11,7 +11,7 @@ config();
 export class AttendanceController {
   public constructor() {}
 
-  public getAll = async (
+  public getAllAttendances = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -19,6 +19,41 @@ export class AttendanceController {
     const attendances = await AttendanceModel.findAll({
       raw: true,
       nest: true,
+      include: [{ all: true }],
+    });
+    return next(new SuccessResponse({ data: attendances }));
+  };
+
+  public getAttendanceByUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    const { id } = req.params;
+    const { from, to } = req.query;
+
+    const user = await UserModel.findByPk(id as string, { raw: true });
+
+    if (!user)
+      throw new ErrorException(
+        404,
+        `User with id ${id} does not exists in database!`
+      );
+
+    let whereQuery: { [k: string]: any } = {
+      userId: user.id,
+    };
+
+    if (from && to) {
+      whereQuery.createdAt = {
+        [Op.between]: [new Date(from as string), new Date(to as string)],
+      };
+    }
+
+    const attendances = await AttendanceModel.findAll({
+      raw: true,
+      nest: true,
+      where: whereQuery,
       include: [{ all: true }],
     });
     return next(new SuccessResponse({ data: attendances }));

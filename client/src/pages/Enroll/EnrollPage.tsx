@@ -19,7 +19,7 @@ const EnrollPage = () => {
       fingerprintId: random(1, 100),
       fingerprintTemplate: '123',
     });
-    console.log({ response });
+
     if ('error' in response) {
       return message.error(response['error']['data'].error, 3);
     }
