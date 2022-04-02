@@ -4,11 +4,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './sider.less';
 import {
   AppstoreAddOutlined,
-  BgColorsOutlined,
+  BgColorsOutlined, ContainerOutlined,
   HomeOutlined,
   IdcardOutlined,
   LoginOutlined,
-  LogoutOutlined,
+  LogoutOutlined, PieChartOutlined,
 } from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import { useAppDispatch, useAppSelector } from '@hooks/rtk-hooks';
@@ -106,14 +106,14 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
             <Menu.Item
               key={'attendance'}
               onClick={() => navigate(`/attendance`)}
-              icon={<IdcardOutlined />}
+              icon={<ContainerOutlined />}
             >
               General Attendance report
             </Menu.Item>
             <Menu.Item
               key={'department-attendance'}
               onClick={() => navigate(`/department-attendance`)}
-              icon={<IdcardOutlined />}
+              icon={<PieChartOutlined />}
             >
               Departments attendance report
             </Menu.Item>
