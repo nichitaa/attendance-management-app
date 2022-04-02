@@ -7,6 +7,7 @@ import { setupStore } from '@feature/store';
 import App from './App';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
+import './index.less';
 
 /**
  * https://vitejs.dev/guide/assets.html#the-public-directory

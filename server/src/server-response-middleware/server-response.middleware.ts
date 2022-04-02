@@ -42,6 +42,8 @@ const serverResponseMiddleware = (
     });
   }
 
+  console.error(serverResponse)
+
   return res.status(500).json({
     isSuccess: false,
     instanceOfResponse: typeof serverResponse,

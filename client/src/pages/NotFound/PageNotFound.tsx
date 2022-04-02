@@ -1,5 +1,7 @@
+import { PageHeader } from '@shared/index';
+
 const PageNotFound = () => {
-  return <div>Page not found :(</div>;
+  return <PageHeader title={'Page not found :('} />;
 };
 
 export default PageNotFound;

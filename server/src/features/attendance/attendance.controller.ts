@@ -1,22 +1,116 @@
 import { config } from 'dotenv';
-import { Op } from 'sequelize';
+import { Op, where } from 'sequelize';
 import { NextFunction, Request, Response } from 'express';
 import { SuccessResponse } from '../../server-response-middleware/success-response';
 import { AttendanceModel } from './attendance.model';
+import { UserModel } from '../user/user.model';
+import { ErrorException } from '../../server-response-middleware/error-exception';
+import { DepartmentModel } from '../department/department.model';
 
 config();
 
 export class AttendanceController {
-  public constructor() {
-  }
+  public constructor() {}
 
-  public getAll = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const attendances = await AttendanceModel.findAll({ raw: true, nest: true, include: [{ all: true }] });
+  public getAllAttendances = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    const { from, to, departmentId, userId } = req.query;
+
+    console.log({ query: req.query });
+
+    let whereQuery: { [k: string]: any } = {};
+    let includeQuery: any[] = [];
+
+    if (from && to) {
+      whereQuery.createdAt = {
+        [Op.between]: [new Date(from as string), new Date(to as string)],
+      };
+    }
+
+    if (userId) {
+      whereQuery.userId = userId;
+    }
+
+    if (departmentId) {
+      includeQuery.push({
+        model: UserModel,
+        where: { departmentId },
+        include: [{ model: DepartmentModel }],
+      });
+    } else {
+      includeQuery.push({
+        model: UserModel,
+        include: [{ model: DepartmentModel }],
+      });
+    }
+
+    console.log({ whereQuery, includeQuery });
+
+    const attendances = await AttendanceModel.findAll({
+      raw: true,
+      nest: true,
+      where: whereQuery,
+      include: includeQuery,
+    });
     return next(new SuccessResponse({ data: attendances }));
   };
 
-  public recordRegisteredTime = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-    const { userId } = req.body;
+  public getAttendanceByUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    const { id } = req.params;
+    const { from, to } = req.query;
+
+    const user = await UserModel.findByPk(id as string, { raw: true });
+
+    if (!user)
+      throw new ErrorException(
+        404,
+        `User with id ${id} does not exists in database!`
+      );
+
+    let whereQuery: { [k: string]: any } = {
+      userId: user.id,
+    };
+
+    if (from && to) {
+      whereQuery.createdAt = {
+        [Op.between]: [new Date(from as string), new Date(to as string)],
+      };
+    }
+
+    const attendances = await AttendanceModel.findAll({
+      raw: true,
+      nest: true,
+      where: whereQuery,
+      include: [{ all: true }],
+    });
+    return next(new SuccessResponse({ data: attendances }));
+  };
+
+  public recordRegisteredTime = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> => {
+    let { fingerprintId } = req.body;
+    fingerprintId = parseInt(fingerprintId);
+
+    const user = await UserModel.findOne({ where: { fingerprintId } });
+
+    if (!user) {
+      throw new ErrorException(
+        404,
+        `User with fingerprint ${fingerprintId} was not found in database!`
+      );
+    }
+
+    const userId = user.id;
 
     /** If already registered once */
     let query = {
@@ -30,7 +124,9 @@ export class AttendanceController {
         },
       },
     };
-    const prevAttendanceRecord = await AttendanceModel.findOne({ where: query });
+    const prevAttendanceRecord = await AttendanceModel.findOne({
+      where: query,
+    });
 
     if (prevAttendanceRecord) {
       const startTime = new Date(prevAttendanceRecord.startTime);
@@ -39,15 +135,24 @@ export class AttendanceController {
       console.log({ totalRegisteredTime });
       await prevAttendanceRecord.update({ endTime, totalRegisteredTime });
       await prevAttendanceRecord.save();
-      return next(new SuccessResponse({ message: `Total registered time: ${totalRegisteredTime} for userId: ${userId}` }));
+      return next(
+        new SuccessResponse({
+          message: `Total registered time: ${totalRegisteredTime} for userId: ${userId}`,
+        })
+      );
     }
 
     /** First time registration */
-    const attendanceRecord = await AttendanceModel.create({ userId, startTime: new Date() }, { raw: true });
+    const attendanceRecord = await AttendanceModel.create(
+      { userId, startTime: new Date() },
+      { raw: true }
+    );
 
-    return next(new SuccessResponse({
-      message: `Created attendance record for userId: ${userId}`,
-      data: attendanceRecord,
-    }));
+    return next(
+      new SuccessResponse({
+        message: `Created attendance record for userId: ${userId}`,
+        data: attendanceRecord,
+      })
+    );
   };
 }

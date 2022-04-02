@@ -3,12 +3,12 @@ import { Layout, Menu } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './sider.less';
 import {
-  HomeOutlined,
-  BgColorsOutlined,
-  IdcardOutlined,
   AppstoreAddOutlined,
-  LogoutOutlined,
+  BgColorsOutlined, ContainerOutlined,
+  HomeOutlined,
+  IdcardOutlined,
   LoginOutlined,
+  LogoutOutlined, PieChartOutlined,
 } from '@ant-design/icons';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import { useAppDispatch, useAppSelector } from '@hooks/rtk-hooks';
@@ -28,7 +28,7 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [selectedMenuKey, setSelectedMenuKey] = useState('');
-  const { isAuthorized, role } = useAppSelector((s) => s.authorization);
+  const { isAuthorized, role, userId } = useAppSelector((s) => s.authorization);
 
   useEffect(() => {
     const key = location.pathname.split('/')[1]; // ['', 'main_route_name', '1']
@@ -89,6 +89,35 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
           >
             Enroll
           </Menu.Item>
+        )}
+
+        {isAuthorized && role === 'default' && (
+          <Menu.Item
+            key={'attendance'}
+            onClick={() => navigate(`/attendance/${userId}`)}
+            icon={<IdcardOutlined />}
+          >
+            Personal attendance report
+          </Menu.Item>
+        )}
+
+        {isAuthorized && role === 'admin' && (
+          <>
+            <Menu.Item
+              key={'attendance'}
+              onClick={() => navigate(`/attendance`)}
+              icon={<ContainerOutlined />}
+            >
+              General Attendance report
+            </Menu.Item>
+            <Menu.Item
+              key={'department-attendance'}
+              onClick={() => navigate(`/department-attendance`)}
+              icon={<PieChartOutlined />}
+            >
+              Departments attendance report
+            </Menu.Item>
+          </>
         )}
 
         {!isAuthorized && (

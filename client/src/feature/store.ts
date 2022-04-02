@@ -6,11 +6,11 @@ import {
 } from '@feature/api/base-api-slice';
 import AuthorizationSlice from '@feature/authorization/authorization-slice';
 import storage from 'redux-persist/lib/storage';
-import { persistReducer } from 'redux-persist';
 import {
   FLUSH,
   PAUSE,
   PERSIST,
+  persistReducer,
   PURGE,
   REGISTER,
   REHYDRATE,

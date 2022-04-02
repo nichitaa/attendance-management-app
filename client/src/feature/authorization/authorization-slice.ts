@@ -5,6 +5,7 @@ interface AuthorizationSlice {
   refreshToken: string | undefined;
   isAuthorized: boolean;
   userId: number;
+  fingerprintId: number;
   email: string | undefined;
   role: string | undefined;
 }
@@ -18,12 +19,13 @@ const authorizationSlice = createSlice({
   initialState,
   reducers: {
     setAuthorizedUser: (state, action) => {
-      const { accessToken, id, email, username, role, refreshToken } =
+      const { accessToken, id, email, fingerprintId, role, refreshToken } =
         action.payload;
       state.bearerToken = accessToken;
       state.refreshToken = refreshToken;
       state.userId = id;
       state.email = email;
+      state.fingerprintId = fingerprintId;
       state.role = role;
       state.isAuthorized = true;
     },

@@ -13,6 +13,16 @@ const DepartmentsPage = lazy(
   () => import('@pages/Departments/DepartmentsPage')
 );
 const EnrollPage = lazy(() => import('@pages/Enroll/EnrollPage'));
+const PersonalAttendanceReportPage = lazy(
+  () => import('@pages/PersonalAttendanceReport/PersonalAttendanceReportPage')
+);
+const AttendanceReportPage = lazy(
+  () => import('@pages/AttendanceReport/AttendanceReportPage')
+);
+const DepartmentAttendanceReportPage = lazy(
+  () =>
+    import('@pages/DepartmentAttendanceReport/DepartmentAttendanceReportPage')
+);
 
 // common
 const PageNotFound = lazy(() => import('@pages/NotFound/PageNotFound'));
@@ -43,6 +53,18 @@ export const routes: IRoutesConfig = {
     {
       path: '/enroll',
       component: <EnrollPage />,
+    },
+    {
+      path: '/attendance',
+      component: <AttendanceReportPage />,
+    },
+    {
+      path: '/attendance/:id',
+      component: <PersonalAttendanceReportPage />,
+    },
+    {
+      path: '/department-attendance',
+      component: <DepartmentAttendanceReportPage />,
     },
   ],
   common: [

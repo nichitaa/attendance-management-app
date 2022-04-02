@@ -25,6 +25,15 @@ const userAPI = baseAPI.injectEndpoints({
       // @ts-expect-error
       invalidatesTags: ['Users'],
     }),
+    registerFingerprint: build.mutation<IAPIResponse<any>, {fingerprintId: number, fingerprintTemplate: string}>({
+      query: (body) => ({
+        url: '/add-fingerprint',
+        method: 'POST',
+        body: body,
+      }),
+      // @ts-expect-error
+      invalidatesTags: ['Users'],
+    }),
     fetchAllUsers: build.query({
       query: () => ({
         url: `/user`,

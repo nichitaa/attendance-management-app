@@ -12,6 +12,7 @@ import {
 } from '../../utiils/refresh-token.utils';
 import { RefreshTokenModel } from './refresh-token.model';
 import jwtConfig from '../../config/jwt.config';
+import { DepartmentModel } from '../department/department.model';
 
 config();
 
@@ -26,8 +27,9 @@ export class UserController {
     const users = await UserModel.findAll({
       raw: true,
       nest: true,
-      include: [{ all: true }],
+      include: [{ model: DepartmentModel }],
     });
+    console.log({users});
     return next(new SuccessResponse({ data: users }));
   };
 
@@ -73,6 +75,17 @@ export class UserController {
         400,
         `No fingerprintId or fingerprintTemplate was registered!`
       );
+
+    const userWithSameFingerprintId = await UserModel.findOne({
+      where: { fingerprintId },
+    });
+
+    if (userWithSameFingerprintId) {
+      throw new ErrorException(
+        400,
+        `User with fingerprint id ${fingerprintId} is already registered!`
+      );
+    }
 
     const userWithoutFingerprint = await UserModel.findOne({
       where: { fingerprintId: null },
@@ -128,6 +141,7 @@ export class UserController {
       id: user.id,
       email: user.email,
       role: user.role,
+      fingerprintId: user.fingerprintId,
       accessToken: token,
       refreshToken: refreshToken,
     };

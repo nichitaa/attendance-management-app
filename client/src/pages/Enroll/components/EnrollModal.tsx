@@ -1,5 +1,15 @@
 import { FC } from 'react';
-import { Button, DatePicker, Form, Input, message, Modal, Row, Select } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+} from 'antd';
 import { UserRoles } from '../../../types/enums';
 import departmentsAPI from '@feature/api/departments-api-slice';
 import userAPI from '@feature/api/user-api-slice';
@@ -19,17 +29,21 @@ const EnrollModal: FC<MainProps> = ({ isVisible, onModalClose }) => {
     userAPI.useCreateUserMutation();
 
   const onFinish = async (values) => {
-    console.log({ values });
     const response = await create({
       ...values,
       dateOfBirth: values.dateOfBirth.toISOString(),
     });
-    console.log({response});
+
     if ('error' in response) {
       return message.error(response['error']['data'].error, 3);
     }
-    onModalClose();
+    closeModal();
     return message.success(response.data.message, 3);
+  };
+
+  const closeModal = () => {
+    form.resetFields();
+    onModalClose();
   };
 
   return (
@@ -39,7 +53,7 @@ const EnrollModal: FC<MainProps> = ({ isVisible, onModalClose }) => {
       style={{ top: 20 }}
       visible={isVisible}
       footer={null}
-      onCancel={onModalClose}
+      onCancel={closeModal}
     >
       <Form
         form={form}
@@ -124,15 +138,28 @@ const EnrollModal: FC<MainProps> = ({ isVisible, onModalClose }) => {
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 24 }}>
-          <Row justify={'end'}>
-            <Button
-              type={'primary'}
-              htmlType={'submit'}
-              loading={isUserCreateLoading}
-              disabled={isUserCreateLoading}
-            >
-              Save
-            </Button>
+          <Row justify={'end'} gutter={[8, 8]}>
+            <Col>
+              <Button
+                onClick={() => form.resetFields()}
+                type={'primary'}
+                danger={true}
+                loading={isUserCreateLoading}
+                disabled={isUserCreateLoading}
+              >
+                Discard
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                type={'primary'}
+                htmlType={'submit'}
+                loading={isUserCreateLoading}
+                disabled={isUserCreateLoading}
+              >
+                Save
+              </Button>
+            </Col>
           </Row>
         </Form.Item>
       </Form>
