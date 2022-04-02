@@ -12,6 +12,7 @@ import {
 } from '../../utiils/refresh-token.utils';
 import { RefreshTokenModel } from './refresh-token.model';
 import jwtConfig from '../../config/jwt.config';
+import { DepartmentModel } from '../department/department.model';
 
 config();
 
@@ -26,7 +27,7 @@ export class UserController {
     const users = await UserModel.findAll({
       raw: true,
       nest: true,
-      include: [{ all: true }],
+      include: [{ model: DepartmentModel }],
     });
     return next(new SuccessResponse({ data: users }));
   };

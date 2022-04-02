@@ -8,3 +8,9 @@ export const msToTime = (ms: number): string => {
   else if (parseInt(hours) < 24) return hours + ' Hrs';
   else return days + ' Days';
 };
+
+
+export const msToHours = (ms: number): number => {
+  let hours = (ms / (1000 * 60 * 60)).toFixed(9);
+  return parseFloat(hours);
+}

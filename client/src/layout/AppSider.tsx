@@ -101,6 +101,16 @@ const AppSider: FC<MainProps> = ({ onCollapse, collapsed }) => {
           </Menu.Item>
         )}
 
+        {isAuthorized && role === 'admin' && (
+          <Menu.Item
+            key={'attendance'}
+            onClick={() => navigate(`/attendance`)}
+            icon={<IdcardOutlined />}
+          >
+            Attendance report
+          </Menu.Item>
+        )}
+
         {!isAuthorized && (
           <Menu.Item
             key={'login'}

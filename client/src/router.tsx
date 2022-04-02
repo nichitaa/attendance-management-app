@@ -16,6 +16,9 @@ const EnrollPage = lazy(() => import('@pages/Enroll/EnrollPage'));
 const PersonalAttendanceReportPage = lazy(
   () => import('@pages/PersonalAttendanceReport/PersonalAttendanceReportPage')
 );
+const AttendanceReportPage = lazy(
+  () => import('@pages/AttendanceReport/AttendanceReportPage')
+);
 
 // common
 const PageNotFound = lazy(() => import('@pages/NotFound/PageNotFound'));
@@ -46,6 +49,10 @@ export const routes: IRoutesConfig = {
     {
       path: '/enroll',
       component: <EnrollPage />,
+    },
+    {
+      path: '/attendance',
+      component: <AttendanceReportPage />,
     },
     {
       path: '/attendance/:id',

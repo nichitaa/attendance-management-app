@@ -1,10 +1,11 @@
 import { config } from 'dotenv';
-import { Op } from 'sequelize';
+import { Op, where } from 'sequelize';
 import { NextFunction, Request, Response } from 'express';
 import { SuccessResponse } from '../../server-response-middleware/success-response';
 import { AttendanceModel } from './attendance.model';
 import { UserModel } from '../user/user.model';
 import { ErrorException } from '../../server-response-middleware/error-exception';
+import { DepartmentModel } from '../department/department.model';
 
 config();
 
@@ -16,10 +17,43 @@ export class AttendanceController {
     res: Response,
     next: NextFunction
   ): Promise<any> => {
+    const { from, to, departmentId, userId } = req.query;
+
+    console.log({ query: req.query });
+
+    let whereQuery: { [k: string]: any } = {};
+    let includeQuery: any[] = [];
+
+    if (from && to) {
+      whereQuery.createdAt = {
+        [Op.between]: [new Date(from as string), new Date(to as string)],
+      };
+    }
+
+    if (userId) {
+      whereQuery.userId = userId;
+    }
+
+    if (departmentId) {
+      includeQuery.push({
+        model: UserModel,
+        where: { departmentId },
+        include: [{ model: DepartmentModel }],
+      });
+    } else {
+      includeQuery.push({
+        model: UserModel,
+        include: [{ model: DepartmentModel }],
+      });
+    }
+
+    console.log({ whereQuery, includeQuery });
+
     const attendances = await AttendanceModel.findAll({
       raw: true,
       nest: true,
-      include: [{ all: true }],
+      where: whereQuery,
+      include: includeQuery,
     });
     return next(new SuccessResponse({ data: attendances }));
   };
